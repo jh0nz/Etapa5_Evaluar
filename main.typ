@@ -431,7 +431,7 @@ Las puntuaciones se calcularon considerando el peso asignado a cada pregunta den
 
 La evaluación arrojó una puntuación promedio general de #calc.round(promedio_general, digits: 2) puntos sobre 10, clasificando al prototipo en la categoría "#categoria_text". Este resultado evidencia un sistema funcional con oportunidades significativas de mejora en usabilidad.
 
-La distribución de puntuaciones revela una marcada polarización: tres heurísticas obtuvieron puntuaciones críticas (< 0.4), mientras que otras tres alcanzaron niveles satisfactorios (> 0.7). Las áreas más deficientes corresponden a Recuperación de Errores (0.23), Prevención de Errores (0.29) y Ayuda y Documentación (0.37), representando el 30% del total evaluado. En contraste, las fortalezas se concentran en Reconocimiento vs Recuerdo (0.75), Consistencia y Estándares (0.74) y Relación con el Mundo Real (0.73).
+La distribución de puntuaciones de las 10 heurísticas evaluadas revela una marcada polarización entre áreas críticas, moderadas y fortalezas. Las áreas más deficientes corresponden a Recuperación de Errores (0.23), Prevención de Errores (0.31) y Ayuda y Documentación (0.36), representando 3 heurísticas críticas que requieren atención inmediata. Las 5 heurísticas con puntuaciones moderadas (0.57-0.69) incluyen aspectos de visibilidad, control de usuario, consistencia, flexibilidad y diseño que necesitan mejoras pero no son críticos. En contraste, solo 2 heurísticas son fortalezas: Reconocimiento vs Recuerdo (0.75) y Relación con el Mundo Real (0.71).
 
 #figure(
   cetz.canvas({
@@ -467,7 +467,7 @@ La distribución de puntuaciones revela una marcada polarización: tres heuríst
   caption: [Puntuación promedio por heurística (escala 0-1)],
 )
 
-El gráfico de barras anterior ilustra la distribución completa de puntuaciones, donde la concentración de barras rojas y naranjas en las primeras posiciones evidencia la urgencia de intervención en aspectos de manejo de errores y documentación. Las heurísticas con puntuaciones intermedias (0.57-0.65) representan oportunidades de mejora que, aunque no críticas, impactan la eficiencia y claridad del sistema.
+El gráfico de barras anterior ilustra la distribución completa de puntuaciones, donde la concentración de barras rojas y naranjas en las primeras posiciones evidencia la urgencia de intervención en aspectos de manejo de errores y documentación. Las 5 heurísticas con puntuaciones moderadas (0.57-0.69) representan oportunidades de mejora que, aunque no críticas, impactan la eficiencia y claridad del sistema. Solo 2 heurísticas superan el umbral de 0.70 para ser consideradas fortalezas.
 
 #figure(
   cetz.canvas({
@@ -479,8 +479,9 @@ El gráfico de barras anterior ilustra la distribución completa de puntuaciones
 
     for (i, h) in heuristicas.enumerate() {
       let promedio_h = resultados.map(r => r.puntuaciones.at(i)).sum() / resultados.len()
-      if promedio_h < 0.4 { criticas += 1 }
-      else if promedio_h < 0.7 { moderadas += 1 }
+      let promedio_redondeado = calc.round(promedio_h, digits: 2)
+      if promedio_redondeado < 0.4 { criticas += 1 }
+      else if promedio_redondeado < 0.7 { moderadas += 1 }
       else { buenas += 1 }
     }
 
@@ -512,7 +513,7 @@ El gráfico de barras anterior ilustra la distribución completa de puntuaciones
   caption: [Clasificación de heurísticas por nivel de severidad],
 )
 
-La gráfica circular confirma un balance equitativo en la distribución: 3 heurísticas críticas, 4 moderadas y 3 fortalezas. Esta proporción sugiere que el prototipo cuenta con bases sólidas en diseño visual y navegación, pero requiere atención inmediata en mecanismos de asistencia al usuario y manejo de situaciones excepcionales.
+La gráfica circular muestra la distribución de heurísticas según su nivel de severidad calculado a partir del promedio de las cuatro evaluaciones independientes. Esta distribución sugiere que el prototipo cuenta con bases sólidas en algunas áreas, pero requiere atención inmediata en mecanismos de asistencia al usuario y manejo de situaciones excepcionales.
 
 La variabilidad entre evaluadores (rango 4.97-6.32 puntos) se mantiene dentro de parámetros esperados para evaluaciones heurísticas independientes, validando la robustez metodológica. Esta convergencia parcial en las puntuaciones individuales fortalece la confiabilidad de los hallazgos críticos identificados por consenso.
 
@@ -534,18 +535,12 @@ El análisis grupal identificó patrones recurrentes y problemas críticos basad
     text(weight: "bold", fill: white, size: 10pt)[Problema Principal],
   ),
   
-  [H9: Recuperación de Errores], text(fill: rgb("E74C3C"), weight: "bold")[0.23], text(fill: rgb("E74C3C"), weight: "bold")[CRÍTICA], [Sin página 404 ni manejo de errores],
-  [H5: Prevención de Errores], text(fill: rgb("E74C3C"), weight: "bold")[0.29], text(fill: rgb("E74C3C"), weight: "bold")[CRÍTICA], [Enlaces rotos activos, validación deficiente],
-  [H10: Ayuda y Documentación], text(fill: rgb("E74C3C"), weight: "bold")[0.37], text(fill: rgb("E74C3C"), weight: "bold")[CRÍTICA], [Sin FAQs ni guía de admisión],
-  [H1: Visibilidad del Estado], text(fill: rgb("E67E22"), weight: "bold")[0.57], text(fill: rgb("E67E22"), weight: "bold")[ALTA], [Ausencia de breadcrumbs],
-  [H7: Flexibilidad y Eficiencia], text(fill: rgb("F39C12"), weight: "bold")[0.60], text(fill: rgb("F39C12"))[MEDIA], [Diseño responsive subóptimo],
-  [H8: Diseño Minimalista], text(fill: rgb("F39C12"), weight: "bold")[0.65], text(fill: rgb("F39C12"))[MEDIA], [Redundancia informativa],
-  [H2: Relación Mundo Real], text(fill: rgb("27AE60"), weight: "bold")[0.73], text(fill: rgb("27AE60"))[BUENA], [Anglicismos menores],
-  [H4: Consistencia y Estándares], text(fill: rgb("27AE60"), weight: "bold")[0.74], text(fill: rgb("27AE60"))[BUENA], [Buscadores duplicados],
-  [H6: Reconocimiento vs Recuerdo], text(fill: rgb("27AE60"), weight: "bold")[0.75], text(fill: rgb("27AE60"))[BUENA], [Información visible],
+  [Heurísticas Críticas], text(fill: rgb("E74C3C"), weight: "bold")[< 0.4], text(fill: rgb("E74C3C"), weight: "bold")[CRÍTICA], [H9: Recuperación de Errores (0.23), H5: Prevención de Errores (0.31), H10: Ayuda y Documentación (0.36)],
+  [Heurísticas Moderadas], text(fill: rgb("F39C12"), weight: "bold")[0.4-0.7], text(fill: rgb("F39C12"))[MODERADA], [H1: Visibilidad (0.57), H7: Flexibilidad (0.59), H3: Control (0.66), H4: Consistencia (0.69), H8: Diseño (0.68)],
+  [Heurísticas Fortaleza], text(fill: rgb("27AE60"), weight: "bold")[>0.7], text(fill: rgb("27AE60"))[FORTALEZA], [H6: Reconocimiento vs Recuerdo (0.75), H2: Relación Mundo Real (0.71)],
 )
 
-== Problemas Críticos y de Severidad Alta
+== Problemas Críticos
 
 #table(
   columns: (1.5fr, 1fr, 3fr, 3fr),
@@ -593,18 +588,9 @@ El análisis grupal identificó patrones recurrentes y problemas críticos basad
    • Página FAQs por categorías\
    • Segregar contactos técnico vs. académico\
    • Agregar fecha y versión a documentos],
-  
-  [H1: Visibilidad del Estado],
-  text(fill: rgb("E67E22"), weight: "bold")[0.57],
-  [• Ausencia total de breadcrumbs\
-   • Feedback visual inconsistente\
-   • Ubicación deficiente en móvil],
-  [• Breadcrumbs con esquema jerárquico\
-   • Estandarizar estados hover/active\
-   • Indicador de sección visible en móvil],
 )
 
-== Problemas Moderados (Severidad Media)
+== Problemas Moderados
 
 #table(
   columns: (1.5fr, 1fr, 3fr, 3fr),
@@ -616,38 +602,50 @@ El análisis grupal identificó patrones recurrentes y problemas críticos basad
   table.header(
     text(weight: "bold", size: 10pt)[*Heurística*],
     text(weight: "bold", size: 10pt)[*Punt.*],
-    text(weight: "bold", size: 10pt)[*Problema*],
-    text(weight: "bold", size: 10pt)[*Recomendación*],
+    text(weight: "bold", size: 10pt)[*Problemas Detectados*],
+    text(weight: "bold", size: 10pt)[*Recomendaciones*],
   ),
   
-  [H4: Consistencia y Estándares],
-  [0.74],
-  [• Buscadores duplicados con comportamiento divergente\
-   • Etiquetado inconsistente\
-   • Errores ortográficos: "Maestrias"\
-   • Íconos sin aria-labels],
-  [• Unificar componente de búsqueda\
-   • Auditoría de nomenclatura\
-   • Revisión ortográfica automatizada\
-   • Agregar tooltips y aria-labels],
+  [H1: Visibilidad del Estado],
+  text(fill: rgb("F39C12"), weight: "bold")[0.57],
+  [• Ausencia total de breadcrumbs\
+   • Feedback visual inconsistente\
+   • Ubicación deficiente en móvil],
+  [• Breadcrumbs con esquema jerárquico\
+   • Estandarizar estados hover/active\
+   • Indicador de sección visible en móvil],
   
   [H7: Flexibilidad y Eficiencia],
-  [0.60],
+  text(fill: rgb("F39C12"), weight: "bold")[0.59],
   [• Diseño responsive subóptimo\
-   • Sin atajos de teclado],
+   • Sin atajos de teclado\
+   • Navegación móvil mejorable],
   [• Aplicar mobile-first design\
-   • Implementar atajos (búsqueda, cerrar, inicio)],
+   • Implementar atajos (búsqueda, cerrar, inicio)\
+   • Optimizar flujo en pantallas pequeñas],
+  
+  [H3: Control y Libertad],
+  text(fill: rgb("F39C12"), weight: "bold")[0.66],
+  [• Sin botón para limpiar filtros\
+   • Rutas de escape limitadas\
+   • Difícil copiar datos de contacto],
+  [• Agregar botón "Limpiar filtros" visible\
+   • Implementar rutas de escape claras\
+   • Mejorar copiabilidad de contactos],
+  
+  [H4: Consistencia y Estándares],
+  text(fill: rgb("F39C12"), weight: "bold")[0.69],
+  [• Algunos componentes con comportamiento variable\
+   • Necesita refuerzo en uniformidad],
+  [• Unificar patrones de interacción\
+   • Guía de estilo de componentes],
   
   [H8: Diseño Minimalista],
-  [0.65],
-  [• Nombre del programa duplicado en imagen y título],
+  text(fill: rgb("F39C12"), weight: "bold")[0.68],
+  [• Nombre del programa duplicado en imagen y título\
+   • Redundancia informativa],
   [• Eliminar texto redundante de imágenes\
    • Usar overlay solo para metadata],
-  
-  [H2: Relación Mundo Real],
-  [0.73],
-  [• Uso de "Brochure" (anglicismo)],
-  [• Reemplazar por "Folleto" o "Información del programa"],
 )
 
 == Fortalezas Identificadas
@@ -669,17 +667,9 @@ El análisis grupal identificó patrones recurrentes y problemas críticos basad
   text(fill: rgb("27AE60"), weight: "bold")[0.75],
   [Filtros visibles, contactos accesibles, nombres de programas destacados],
   
-  [H4: Consistencia y Estándares],
-  text(fill: rgb("27AE60"), weight: "bold")[0.74],
-  [Diseño visual coherente, identidad gráfica consistente],
-  
   [H2: Relación Mundo Real],
-  text(fill: rgb("27AE60"), weight: "bold")[0.73],
+  text(fill: rgb("27AE60"), weight: "bold")[0.71],
   [Lenguaje académico apropiado, chatbot conversacional efectivo],
-  
-  [Consistencia Visual],
-  text(fill: rgb("27AE60"), weight: "bold")[--],
-  [Paleta de colores coherente, tipografía uniforme en todo el sitio],
 )
 
 
@@ -722,25 +712,21 @@ La evaluación heurística del prototipo del sitio web de Posgrado FCyT-UMSS fue
   ),
   
   [Problemas Críticos\ (puntuación < 0.4)],
-  text(size: 11pt, fill: rgb("E74C3C"))[3],
-  [H9 (0.23), H5 (0.29), H10 (0.37)],
+  text(size: 11pt, fill: rgb("E74C3C"))[Ver tabla],
+  [Recuperación de Errores, Prevención, Ayuda y Documentación],
   
-  [Problemas de Severidad Alta\ (puntuación 0.4-0.6)],
-  text(size: 11pt, fill: rgb("E67E22"))[1],
-  [H1 (0.57)],
-  
-  [Problemas Moderados\ (puntuación 0.6-0.7)],
-  text(size: 11pt, fill: rgb("F39C12"))[3],
-  [H7 (0.60), H8 (0.65), H4 (0.74)],
+  [Problemas Moderados\ (puntuación 0.4 - 0.7)],
+  text(size: 11pt, fill: rgb("F39C12"))[Ver tabla],
+  [Visibilidad, Control, Flexibilidad, Diseño y otros],
   
   [Fortalezas\ (puntuación > 0.7)],
-  text(size: 11pt, fill: rgb("27AE60"))[3],
-  [H2 (0.73), H6 (0.75), H3 (n/a)],
+  text(size: 11pt, fill: rgb("27AE60"))[Ver tabla],
+  [Reconocimiento vs Recuerdo, Relación Mundo Real],
 )
 
 == Hallazgos Principales
 
-El análisis reveló una base funcional operativa con deficiencias concentradas en manejo de errores, prevención y documentación de ayuda. Las tres heurísticas con puntuación crítica (< 0.4) representan el 30% del total evaluado, indicando áreas específicas que requieren intervención inmediata.
+El análisis de las 10 heurísticas reveló una base funcional operativa con deficiencias concentradas en manejo de errores, prevención y documentación de ayuda. Las heurísticas con puntuación crítica (< 0.4) requieren intervención inmediata, las moderadas (0.4 - 0.7) necesitan mejoras planificadas, y las fortalezas (> 0.7) deben preservarse como bases sólidas del sistema.
 
 === Áreas Críticas Identificadas
 
@@ -762,11 +748,11 @@ El análisis reveló una base funcional operativa con deficiencias concentradas 
   [Usuarios sin orientación al encontrar errores, imposibilidad de recuperación efectiva],
   
   [H5: Prevención de Errores],
-  [0.29],
+  [0.31],
   [Usuarios acceden a contenido inexistente, frustración por validaciones deficientes],
   
   [H10: Ayuda y Documentación],
-  [0.37],
+  [0.36],
   [Dependencia excesiva del chatbot, ausencia de rutas informativas claras],
 )
 
@@ -789,12 +775,8 @@ El análisis reveló una base funcional operativa con deficiencias concentradas 
   [0.75],
   [Elementos visibles facilitan navegación sin depender de memoria del usuario],
   
-  [H4: Consistencia y Estándares],
-  [0.74],
-  [Coherencia visual mantiene identidad institucional en todo el sitio],
-  
   [H2: Relación Mundo Real],
-  [0.73],
+  [0.71],
   [Terminología académica apropiada, chatbot con lenguaje conversacional natural],
 )
 
@@ -819,7 +801,7 @@ El análisis reveló una base funcional operativa con deficiencias concentradas 
   [• Página 404 personalizada\
    • Validación de formularios\
    • Autocompletado en buscador],
-  text(fill: rgb("E74C3C"))[+2.0 puntos],
+  text(fill: rgb("E74C3C"))[+0.7 puntos],
   
   [P1\ Alta],
   [Corto plazo],
@@ -827,21 +809,21 @@ El análisis reveló una base funcional operativa con deficiencias concentradas 
    • Crear sección de admisión\
    • Desarrollar FAQs\
    • Unificar buscadores],
-  text(fill: rgb("E67E22"))[+1.2 puntos],
+  text(fill: rgb("E67E22"))[+0.8 puntos],
   
   [P2\ Media],
   [Mediano plazo],
   [• Optimizar diseño móvil\
    • Feedback visual consistente\
    • Segregar contactos],
-  text(fill: rgb("F39C12"))[+0.8 puntos],
+  text(fill: rgb("F39C12"))[+0.5 puntos],
 )
 
 == Proyección y Confiabilidad
 
 La metodología aplicada con cuatro evaluadores independientes @nielsen1990heuristic garantizó la identificación de problemas recurrentes mediante consenso, incrementando la confiabilidad de los hallazgos. La variabilidad moderada entre evaluadores (4.97 - 6.32 puntos) es consistente con estudios previos que demuestran que múltiples evaluadores detectan entre 75-90% de problemas de usabilidad @jeffries1991user.
 
-Con la implementación completa del plan priorizado, se proyecta una mejora de hasta 4.0 puntos, elevando la calificación a 9.57/10 (categoría "Excelente"). La implementación gradual por fases permitiría alcanzar la categoría "Buen producto" (7.57/10) tras completar las prioridades P0 y P1, mejorando significativamente la experiencia del usuario y alineándose con estándares académicos reconocidos.
+Con la implementación completa del plan priorizado (P0 + P1 + P2), se proyecta una mejora de aproximadamente 2.0 puntos, elevando la calificación a la categoría "Buen producto". La implementación gradual por fases permitiría primero resolver los problemas críticos (P0: +0.7), luego las mejoras de alta prioridad (P1: +0.8), y finalmente el pulido del sistema (P2: +0.5), mejorando significativamente la experiencia del usuario y alineándose con estándares académicos reconocidos.
 
 #pagebreak()
 

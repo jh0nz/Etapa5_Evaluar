@@ -341,7 +341,7 @@ puntuacion: 0
   table.cell(fill: categoria_color.lighten(85%))[#text(
     weight: "bold",
     fill: categoria_color,
-  )[#calc.round(total, digits: 1) / 10]],
+  )[#calc.round(total, digits: 2) / 10]],
 )
 
 = Notas y Evidencias

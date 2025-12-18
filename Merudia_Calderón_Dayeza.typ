@@ -49,7 +49,7 @@
   ),
   (
     // 2. Relación entre el Sistema y el Mundo Real
-    (puntuacion: 1, extra: [
+    (puntuacion: 0.5, extra: [
         *Nota:* Usa el término "Brochure"
         
         *Imagen:*
@@ -64,7 +64,7 @@
     (puntuacion: 1), // ¿Etiquetas y filtros son claras y sencillas?
     (puntuacion: 1), // ¿Contactos están en formato copiable y correcto?
     (puntuacion: 0, extra: [
-        *Nota:* Usa el término "Brochure"
+        *Nota:* No usan lenguaje cotidiano, ni dan solución.
         
         *Imagen:*
         #image(base64.decode(file.dayeza.images.OJOd), width: 100%)
@@ -421,7 +421,7 @@
   [*Heurística*], [*Pregunta*], [*Peso*], [*Respuesta*], [*Total*],
   ..todas_filas.flatten(),
 )
-
+#pagebreak()
 = Resumen de la Evaluación
 
 #let punts = ()
@@ -458,7 +458,7 @@
   table.cell(fill: categoria_color.lighten(85%))[#text(
     weight: "bold",
     fill: categoria_color,
-  )[#calc.round(total, digits: 1) / 10]],
+  )[#calc.round(total, digits: 2) / 10]],
 )
 
 #pagebreak()

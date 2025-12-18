@@ -61,7 +61,7 @@
         *Nota:*
         La copia de los datos de contacto es parcialmente fácil, pero puede mejorarse. Aunque la información está visible y en formato texto, no existen ayudas explícitas que faciliten o indiquen claramente la acción de copiar.
 
-        *Imagen:*#image("images/Contactos.png", width: 30%)
+        *Imagen:*#image("images/contactos.png", width: 30%)
       ],
     ), // ¿Es fácil copiar datos de contacto (dirección, teléfono) desde la página?
     (puntuacion: 0.5), // ¿Hay rutas de escape visibles si una acción falla o no aporta resultado?
@@ -274,7 +274,7 @@
   [*Heurística*], [*Pregunta*], [*Peso*], [*Respuesta*], [*Total*],
   ..todas_filas.flatten(),
 )
-
+#pagebreak()
 = Resumen de la Evaluación
 
 #let punts = ()
@@ -311,7 +311,7 @@
   table.cell(fill: categoria_color.lighten(85%))[#text(
     weight: "bold",
     fill: categoria_color,
-  )[#calc.round(total, digits: 1) / 10]],
+  )[#calc.round(total, digits: 2) / 10]],
 )
 
 #pagebreak()

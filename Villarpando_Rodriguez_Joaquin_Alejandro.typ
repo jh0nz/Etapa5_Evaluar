@@ -250,7 +250,7 @@
   [*Heurística*], [*Pregunta*], [*Peso*], [*Respuesta*], [*Total*],
   ..todas_filas.flatten(),
 )
-
+#pagebreak()
 = Resumen de la Evaluación
 
 #let punts = ()
@@ -287,7 +287,7 @@
   table.cell(fill: categoria_color.lighten(85%))[#text(
     weight: "bold",
     fill: categoria_color,
-  )[#calc.round(total, digits: 1) / 10]],
+  )[#calc.round(total, digits: 2) / 10]],
 )
 
 #pagebreak()
