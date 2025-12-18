@@ -1,191 +1,848 @@
-[Objetivos clave], [Necesidades], [Contexto]),
-  [Estudiante / Postulante],
-  [Autoridades; Calendario Acad.; Misión/Visión],
-  [Acceso rápido; navegación simple; enlaces funcionales],
-  [Móvil y escritorio],
-
-  [Docente / Administrativo],
-  [Manual de Funciones; Autoridades; Calendario],
-  [Estructura por cargos; anclas claras; listas escaneables],
-  [Principalmente escritorio],
-
-  [Visitante externo / familia],
-  [Antecedentes; Misión/Visión; Metas],
-  [Introducción clara; información confiable; contacto visible],
-  [Móvil o escritorio],
-)
-
-== Escenarios de tareas
-#table(
-  columns: 3,
-  align: left,
-  table.header([Perfil], [Tarea], [Ruta]),
-  [Estudiante / Postulante], [Consultar 'Autoridades'], [Generalidades → Autoridades],
-  [Estudiante / Postulante], [Abrir Calendario Académico], [Generalidades → Calendario],
-
-  [Docente / Administrativo], [Revisar Manual de Funciones por cargo], [Generalidades → Manual de Funciones],
-  [Docente / Administrativo], [Ver responsable y objetivos de Administración], [Generalidades → Administración],
-
-  [Visitante externo / familia], [Leer Antecedentes], [Generalidades → Antecedentes],
-  [Visitante externo / familia], [Revisar Misión/Visión y Metas], [Generalidades → Misión/Visión; Metas],
-)
-
-= Lista de verificación
+#import "@preview/lilaq:0.5.0" as lq
+#import "@preview/cetz:0.4.2"
+#import "@preview/cetz-plot:0.1.3": chart, plot
+#import "@preview/plotst:0.2.0" as pst
+#import "@preview/based:0.2.0": base64
+#let file = json("images.json")
 
 #import "heuristicas.typ": heuristicas
+#import "Gutierrez_Hinojosa_Jhon.typ": heuristicas_eval as eval_jhon
+#import "Anturiano_Eulate_Eleonor.typ": heuristicas_eval as eval_eleonor
+#import "Merudia_Calderón_Dayeza.typ": heuristicas_eval as eval_dayeza
+#import "Villarpando_Rodriguez_Joaquin_Alejandro.typ": heuristicas_eval as eval_joaquin
 
-#let colores_heuristicas = (
-  rgb("FF6B6B"), // 1. Rojo suave
-  rgb("FFA500"), // 2. Naranja
-  rgb("FFD93D"), // 3. Amarillo
-  rgb("6BCB77"), // 4. Verde
-  rgb("4D96FF"), // 5. Azul
-  rgb("9D84B7"), // 6. Púrpura
-  rgb("FF6FB5"), // 7. Rosa
-  rgb("FF9F45"), // 8. Naranja claro
-  rgb("7BC9FF"), // 9. Azul cielo
-  rgb("A78BFA"), // 10. Violeta
-)
+#set page(width: 8.5in, height: 11in, margin: 1in, header: none)
+#set text(size: 13pt, lang: "es")
+#set heading(numbering: "1.")
+#show heading: set text(size: 1.2em)
+#show heading: set block(spacing: 1.2em)
 
-#let filas_tabla = ()
-#for (idx, h) in heuristicas.enumerate() {
-  let num_preguntas = h.preguntas.len()
-  let color_heuristica = colores_heuristicas.at(idx)
-  let color_claro = color_heuristica.lighten(85%)
-  for (i, p) in h.preguntas.enumerate() {
-    if i == 0 {
-      filas_tabla.push((
-        table.cell(rowspan: num_preguntas, fill: color_heuristica)[#text(fill: white, weight: "bold")[#(idx + 1)]],
-        table.cell(rowspan: num_preguntas, fill: color_heuristica.lighten(70%))[#text(weight: "bold")[#h.nombre.slice(3)]],
-        table.cell(fill: color_claro)[#(i + 1). #p.texto],
-        table.cell(fill: color_claro)[#p.peso],
-      ))
-    } else {
-      filas_tabla.push((
-        table.cell(fill: color_claro)[#(i + 1). #p.texto],
-        table.cell(fill: color_claro)[#p.peso],
-      ))
-    }
-  }
+#let today = datetime.today()
+#show link: set text(fill: blue)
+#show link: underline
+#show bibliography: set heading(numbering: "1.")
+
+
+#set par(leading: 1.1em, spacing: 1.2em, justify: true)
+#let cabezera_barata = {
+  block(spacing: 0em)[
+    #table(
+      columns: (13.5%, 73%, 13.5%),
+      align: horizon + center,
+      stroke: none,
+      table.cell(inset: 0pt)[ #image(base64.decode(file.main.umss), width: 70%)],
+      table.cell(inset: 0pt)[
+        #text(size: 14pt)[
+          #table(
+            columns: 1,
+            stroke: none,
+            [
+              *UNIVERSIDAD MAYOR DE SAN SIMÓN*
+            ],
+            [
+              *FACULTAD DE CIENCIAS Y TECNOLOGÍA*
+            ],
+          )
+        ]
+
+        #text(size: 14pt)[*CARRERA DE INGENIERÍA INFORMÁTICA*]
+      ],
+      table.cell(inset: 0pt)[#image(base64.decode(file.main.fcyt), width: 100%)],
+    )
+  ]
 }
 
-#table(
-  columns: (1fr, 1fr, 3fr, 3fr),
-  align: (center, left, left, center),
+#let fecha_entrega = datetime(year: 2025, month: 12, day: 18)
 
-  fill: (x, y) => if y == 0 { rgb("2C3E50") } else { white },
-  table.header(
-    table.cell(fill: rgb("2C3E50"))[#text(fill: white, weight: "bold")[Nº]], 
-    table.cell(fill: rgb("2C3E50"))[#text(fill: white, weight: "bold")[Heurística]], 
-    table.cell(fill: rgb("2C3E50"))[#text(fill: white, weight: "bold")[Preguntas orientadoras]], 
-    table.cell(fill: rgb("2C3E50"))[#text(fill: white, weight: "bold")[Peso]]
-  ),
-  ..filas_tabla.flatten(),
+#align(center)[
+  #cabezera_barata
+  #v(4cm)
+  #table(
+    columns: 2,
+    align: (left, left),
+    stroke: none,
+    fill: none,
+    [*Tema:*], [#upper[Trabajando la Etapa 5: EVALUAR]],
+
+    [], [],
+    [*Materia:*], [#upper[Interacción Humano Computador]],
+    [], [],
+    [*Integrantes:*], [#upper[ Anturiano Eulate Eleonor Camile - 202206250] ],
+    [], [#upper[Gutiérrez Hinojosa Jhon Deymar] - 202107786],
+    [], [#upper[Merudia Calderón Dayeza] - 202202138],
+    [], [#upper[Villarpando rodriguez joaquin Alejandro - 201909840 ] ],
+    [], [],
+    [*Grupo:*], [API],
+    [], [],
+    [*Docente:*], [#upper[LIC. Flores Villarroel Corina Justina]],
+    [], [],
+    [*Fecha:*], [#fecha_entrega.display("[day]/[month]/[year]")],
+  )
+]
+
+#v(5cm)
+#align(center)[COCHABAMBA-BOLIVIA]
+#set text(size: 12pt)
+#pagebreak()
+
+// indice
+#outline(indent: auto, title: [CONTENIDO])
+
+#pagebreak()
+#counter(page).update(1)
+#set page(
+  footer: [
+    #block[
+      #line(length: 100%)
+      #h(1fr)
+      #context counter(page).display()
+    ]
+  ],
 )
 
-== Instrucciones para la evaluación:
-
-+ *Puntuación*: Evalúa cada pregunta aplicable asignando:
-  - *1* = Sí (cumple completamente)
-  - *0.5* = Mejorable (cumple parcialmente)
-  - *0* = No (no cumple)
-  - *N/A* = No aplica (marca como `none` en el código)
-
-+ *Notas* (opcional): Cuando una pregunta tenga problemas o aspectos destacables, agrega una nota explicativa breve que justifique la puntuación otorgada.
-
-+ *Evidencias* (opcional): Si es necesario respaldar tu evaluación con una captura de pantalla, incluye la ruta de la imagen (ej: `"images/captura.png"`).
-
-+ *Cálculo*: El sistema promediará automáticamente solo las preguntas aplicables por heurística (excluyendo N/A).
-
-+ *Puntuación total*: Suma las 10 heurísticas → obtienes el puntaje final (0 a 10).
-
-+ *Clasificación*: El sistema categorizará automáticamente el sitio según el puntaje total.
-
-+ *Recomendaciones*: Las notas que agregues aparecerán en una sección especial al final del documento junto con las evidencias.
-
-
-= Problemas de Usabilidad Prioritarios
-
-Después de la evaluación individual realizada por los cuatro miembros del equipo, se consolidaron los hallazgos más críticos mediante una lluvia de ideas. A continuación se presentan los 8 problemas prioritarios identificados de manera consensuada:
-
-#table(
-  columns: (auto, auto, auto, auto),
-  align: (center, left, left, left),
-  stroke: 0.6pt + rgb("D0D0D0"),
-  inset: 6pt,
-  fill: (x, y) => if y == 0 { rgb("2C3E50") } else if calc.odd(y) { white } else { rgb("F8F9FA") },
-  
-  table.header(
-    [*Heurística*],
-    [*Aspecto Evaluado*],
-    [*Problema Identificado*],
-    [*Evidencia*]
+#set text(size: 11pt)
+#set par(leading: 1.145em)
+#show image: it => align(center, it)
+#set table(
+  stroke: (x, y) => (
+    left: if x > 0 { 0.5pt + rgb("E0E0E0") } else { none },
+    right: none,
+    top: if y > 0 { 0.5pt + rgb("E0E0E0") } else { 1pt + rgb("2C3E50") },
+    bottom: if y == 0 { 1.5pt + rgb("2C3E50") } else { 0.5pt + rgb("E0E0E0") },
   ),
-  
-  [*1.* Visibilidad del estado],
-  [Estado de carga y feedback],
-  [El sitio no incluye barras de carga, animaciones ni señales visuales que indiquen progreso. No hay mensajes de retroalimentación ni indicadores consistentes. Las páginas cambian de manera inmediata, generando incertidumbre sobre si la acción fue procesada.],
-  [#link("https://drive.google.com/file/d/1QpNQy4eHS7NKKQb9TJT0T72-S2JDxdqV/view?usp=sharing")[Drive]],
-  
-  [*2.* Correspondencia con mundo real],
-  [Íconos y metáforas visuales],
-  [La página entera no usa ni un ícono para guiar a los usuarios. Solo hay texto plano, lo que reduce significativamente la comprensión rápida de funciones y la eficiencia de navegación. Los elementos visuales son extremadamente limitados.],
-  [#link("https://drive.google.com/file/d/1l6yQD5aQYcyqfJgBoS4-32UijPfbphYw/view?usp=sharing")[Drive]],
-  
-  [*9.* Reconocer y recuperarse de errores],
-  [Visibilidad de errores],
-  [Los errores del formulario no se muestran en sus respectivos campos, dificultando la identificación y corrección inmediata. El usuario debe buscar el problema sin indicación clara de dónde ocurrió, aumentando frustración y tiempo de corrección.],
-  [#link("https://drive.google.com/file/d/1Ou94-lBTbNj4rtTVcSUxgW56qRfZaIm2/view?usp=drive_link")[Drive]],
-  
-  [*4.* Consistencia y estándares],
-  [Experiencia móvil/escritorio],
-  [La página está bien adaptada a escritorio pero presenta desalineaciones severas y diseño no responsivo en móvil. No se pueden acceder a las funciones correctamente. El problema está presente en toda la página.],
-  [#link("https://drive.google.com/file/d/1dz9iovXiFAkG3uYCuM2jnP2zySWyQchj/view?usp=drive_link")[Drive]],
-  
-  [*8.* Estética y diseño],
-  [Jerarquía visual y legibilidad],
-  [Los títulos son visibles pero el texto carece de resaltados o jerarquía tipográfica que guíe la atención. Los textos son largos y la tipografía pequeña, dificultando la lectura rápida. La distribución del espacio carece de aprovechamiento visual eficiente.],
-  [#link("https://drive.google.com/file/d/1i9nyrLtr4VNu2ZUM5ItwsXCu6tkDLDUL/view?usp=drive_link")[Drive]],
-  
-  [*5.* Prevención de errores],
-  [Claridad en navegación],
-  [Algunos submenús como "Generalidades" llevan al mismo destino, generando confusión en la navegación y aumentando el riesgo de clics erróneos. Falta claridad en las rutas de navegación.],
-  [#link("https://drive.google.com/file/d/1C4UfekhF2BsipZ7qbtiUoiNzTM6BMRnr/view?usp=drive_link")[Drive]],
-  
-  // Problema 7: Diseño anticuado (MEJORABLE)
-  [*8.* Estética y diseño],
-  [Modernidad del diseño],
-  [La combinación de colores y diseño general es funcional pero anticuada. Es usable y legible pero poco atractiva visualmente para estándares actuales. Los menús cumplen función básica pero sin aprovechamiento visual eficiente.],
-  [#link("https://drive.google.com/file/d/1coFogno1Zw29SLmn-Lvo0MtclyIAZW6f/view?usp=drive_link")[Drive]],
-  
-  [*10.* Ayuda y documentación],
-  [Soporte y asistencia],
-  [No existe una sección de ayuda o documentación accesible. No hay materiales de apoyo, tutoriales ni asistencia contextual. Únicamente se dispone del enlace "contáctenos" en el menú principal, que no ofrece información directa ni asistencia inmediata al usuario.],
-  [#link("https://drive.google.com/file/d/1_jfwo45RtcQ6Rn0Vmc-XKS8bdPUlujLm/view?usp=drive_link")[Drive]],
+  inset: 4pt,
+  gutter: 0em,
+  fill: (x, y) => if y == 0 { rgb("34495E") } else if calc.odd(y) { white } else { rgb("F8F9FA") },
 )
+#show table.cell: it => {
+  if it.y == 0 {
+    set text(white, weight: "bold")
+    it
+  } else { it }
+}
 
-== Recomendaciones Prioritarias
+= Introducción
 
-+ *Implementar diseño responsive* adaptable a móviles y tablets
-+ *Agregar indicadores de carga* y feedback visual en todas las acciones
-+ *Mejorar sistema de validación de formularios* mostrando errores junto a cada campo
-+ *Crear sección de ayuda* con FAQs y tutoriales básicos
-+ *Incorporar sistema de iconografía* consistente
-+ *Revisar y simplificar navegación* eliminando duplicados
-+ *Aumentar tamaño de fuente* y mejorar jerarquía visual
-+ *Modernizar paleta de colores* manteniendo identidad institucional
-+ *Añadir una función de modo oscuro* para la personalización
+La evaluación heurística es un método de inspección de usabilidad que consiste en evaluar un producto por parte de evaluadores expertos usando principios reconocidos de usabilidad @nielsen1994usability. Este método, desarrollado por Jakob Nielsen y Rolf Molich @molich1990improving, permite identificar problemas de usabilidad de manera sistemática y efectiva @jeffries1991user.
 
-= Conclusiones
+Este informe presenta los resultados de la evaluación heurística realizada sobre el prototipo del sitio web de Posgrado de la Facultad de Ciencias y Tecnología de la Universidad Mayor de San Simón. El objetivo es identificar problemas de usabilidad y proponer recomendaciones para mejorar la experiencia del usuario.
 
-La evaluación heurística del sitio web de la sección "Generalidades" reveló deficiencias significativas en múltiples áreas de usabilidad. Los problemas más críticos identificados incluyen la falta de diseño responsive, ausencia de feedback visual del sistema, carencia total de iconografía y un sistema de ayuda inexistente.
+El proceso de evaluación fue llevado a cabo de manera independiente por cada miembro del equipo, aplicando las heurísticas según un conjunto de tareas prioritarias. Posteriormente, se consolidaron los hallazgos para generar este informe grupal.
 
-Estos hallazgos coinciden con investigaciones previas que demuestran que la mayoría de los sitios web institucionales presentan problemas similares de usabilidad @lazar2006improving. La implementación de las recomendaciones propuestas permitirá mejorar significativamente la experiencia del usuario, especialmente para usuarios móviles que representan una porción creciente del tráfico web.
+= Marco de Referencia
 
-Es fundamental que las mejoras se implementen de manera priorizada, comenzando por los problemas críticos que afectan directamente la funcionalidad básica del sitio (responsive design, feedback visual, manejo de errores), seguidos por las mejoras importantes que optimizan la experiencia general del usuario.
+La evaluación se fundamenta en las 10 reglas heurísticas de usabilidad de Jakob Nielsen @nielsen1990heuristic @nielsen1994heuristic, que son ampliamente reconocidas en la industria como principios fundamentales para el diseño de interfaces usables:
 
-La evaluación heurística demostró ser un método efectivo para identificar problemas de usabilidad de manera sistemática y costo-eficiente, validando su utilidad como herramienta de evaluación en contextos académicos e institucionales @jeffries1991user.
+1. Visibilidad del estado del sistema
+2. Relación entre el sistema y el mundo real
+3. Control y libertad del usuario
+4. Consistencia y estándares
+5. Prevención de errores
+6. Reconocimiento antes que recuerdo
+7. Flexibilidad y eficiencia de uso
+8. Estética y diseño minimalista
+9. Ayudar a los usuarios a reconocer, diagnosticar y recuperarse de errores
+10. Ayuda y documentación
 
 #pagebreak()
 
-#bibliography("bib.bib", title: "Referencias Bibliográficas", style: "apa")
+= Escenarios de Evaluación
+
+== Guía de Evaluación Heurística: Posgrado FCyT
+
+- Sitio objetivo y despliegue para pruebas: #link("https://postgrado-umss.vercel.app")
+- Repositorio evaluado: #link("https://github.com/Dantec01/PostgradoUMSSPrototipo.git")
+- Equipo autor: root compartió el repositorio para su revisión.
+
+== Usuario que accede al sitio
+
+Estudiante de pregrado en fase de titulación o egresado en una carrera de la FCYT de la UMSS, que busca opciones de especialización y posibles rutas de titulación a través de programas de posgrado ofrecidos por la facultad.
+
+=== Tareas Prioritarias para la Evaluación
+
+Para realizar una evaluación objetiva y representativa, se simularán las siguientes tareas clave que ejecutaría un usuario real en su búsqueda de información sobre programas de posgrado:
+
+1. *Explorar la oferta académica*: Revisar los tipos de programas disponibles (maestrías y diplomados) desde la página de inicio.
+
+2. *Consultar detalles de un programa*: Seleccionar un programa de interés y acceder a 'Más Información' para conocer costo, duración, requisitos y modalidad. //*(Nota: solo el diplomado de Ciencia de Datos ofrece PDFs funcionales actualmente)*
+
+3. *Buscar información de inscripción*: Utilizar el chatbot para consultar procedimientos de inscripción o explorar guías disponibles.
+
+4. *Filtrar por área de estudio*: Buscar diplomados en áreas específicas mediante buscador o filtros.
+
+5. *Localizar contactos e información adicional*: Encontrar avisos, noticias y vías de contacto navegando por secciones de información o consultando al chatbot.
+
+#pagebreak()
+
+= Metodología de Evaluación
+
+== Proceso de Evaluación
+
+El proceso de evaluación seguido en este trabajo se estructuró de la siguiente manera:
+
++ Evaluación independiente: Cada miembro del equipo evaluador procedió de forma independiente a analizar el prototipo aplicando las 10 heurísticas de usabilidad de Jakob Nielsen siguiendo las tareas planteadas. Este enfoque independiente reduce el sesgo y aumenta la cobertura de problemas detectados @nielsen1990heuristic.
+
++ Registro de hallazgos: Se documentaron de manera detallada las violaciones a las heurísticas, especificando para cada caso la descripción del problema, el contexto de aparición y evidencia @nielsen1994heuristic.
+
++ Análisis grupal: El equipo se reunió para intercambiar, discutir y analizar los resultados individuales, identificando patrones comunes y priorizando los problemas según su severidad, frecuencia e impacto.
+
++ Consolidación de resultados: Se elaboró este informe grupal que lista los problemas identificados junto con sus características de severidad y recomendaciones de mejora.
+
+== Criterios de Evaluación
+
+Para cada pregunta de evaluación se asignó una puntuación según los siguientes criterios:
+
+- *1* = Sí (cumple completamente): El sistema satisface el criterio de manera completa y efectiva.
+- *0.5* = Mejorable (cumple parcialmente): El sistema satisface el criterio de manera parcial o con limitaciones significativas.
+- *0* = No (no cumple): El sistema no satisface el criterio o lo viola.
+- *N/A* = No aplica: El criterio no es relevante para este contexto.
+
+#pagebreak()
+
+= Evaluación Heurística Detallada
+
+== Heurísticas y Preguntas de Evaluación
+
+#table(
+  columns: (1fr, 4fr),
+  align: (center + horizon, left + top),
+  stroke: (x, y) => (
+    left: if x > 0 { 0.5pt + rgb("E0E0E0") } else { none },
+    right: none,
+    top: if y > 0 { 0.5pt + rgb("E0E0E0") } else { 1pt + rgb("2C3E50") },
+    bottom: if y == 0 { 1.5pt + rgb("2C3E50") } else { 0.5pt + rgb("E0E0E0") },
+  ),
+  inset: 6pt,
+  gutter: 0em,
+  fill: (x, y) => if y == 0 { rgb("34495E") } else if calc.odd(y) { white } else { rgb("F8F9FA") },
+
+  table.header(
+    text(weight: "bold", fill: white, size: 10pt)[Heurística],
+    text(weight: "bold", fill: white, size: 10pt)[Preguntas de Evaluación],
+  ),
+
+  text(size: 9pt)[Visibilidad del Estado del Sistema],
+  text(size: 9pt)[
+    - ¿Se muestra visualmente el estado de carga?
+    - ¿Se indica la página actual?
+    - ¿Se informa el resultado de acciones (búsquedas, filtros)?
+    - ¿Las páginas vacías o en desarrollo muestran mensajes claros?
+    - ¿Los elementos interactivos dan retroalimentación visual?
+    - ¿Las migas de pan reflejan la ubicación?
+  ],
+
+  text(size: 9pt)[Relación entre el Sistema y el Mundo Real],
+  text(size: 9pt)[
+    - ¿La terminología es familiar para el usuario?
+    - ¿Enlaces e íconos apuntan a las herramientas correctas?
+    - ¿Etiquetas y filtros son claras y sencillas?
+    - ¿Contactos están en formato copiable y correcto?
+    - ¿Los errores usan lenguaje cotidiano?
+    - ¿Mapas y documentos están bien etiquetados?
+    - ¿El chatbot es natural y conversacional?
+  ],
+
+  text(size: 9pt)[Control y Libertad del Usuario],
+  text(size: 9pt)[
+    - ¿Se vuelve al Inicio con un solo clic?
+    - ¿Se puede cambiar entre tipos de programas sin regresar?
+    - ¿Existe botón claro para borrar filtros?
+    - ¿Los avisos emergentes pueden cerrarse fácilmente?
+    - ¿Es fácil copiar datos de contacto?
+    - ¿Hay rutas de escape visibles si falla una acción?
+  ],
+
+  text(size: 9pt)[Consistencia y Estándares],
+  text(size: 9pt)[
+    - ¿Los enlaces y menús funcionan igual en todas las páginas?
+    - ¿El diseño es coherente (colores, tipografías, botones)?
+    - ¿Los controles mantienen el mismo comportamiento?
+    - ¿Las etiquetas y términos son consistentes?
+    - ¿El logo y rutas principales llevan siempre al inicio?
+  ],
+
+  text(size: 9pt)[Prevención de Errores],
+  text(size: 9pt)[
+    - ¿Se ocultan o deshabilitan enlaces no funcionales?
+    - ¿El buscador sugiere correcciones o alternativas?
+    - ¿Los formularios señalan campos obligatorios y errores?
+    - ¿Los enlaces e imágenes rotas se comunican?
+    - ¿Hay opciones para recuperar una acción fallida?
+    - ¿Los mensajes de error ayudan a resolver?
+  ],
+
+  text(size: 9pt)[Reconocimiento antes que Recuerdo],
+  text(size: 9pt)[
+    - ¿Se ven los filtros aplicados?
+    - ¿El contacto es fácil de encontrar?
+    - ¿Nombres de programas visibles?
+    - ¿Menú accesible al hacer scroll?
+    - ¿Iconos identifican categorías?
+    - ¿Buscador sugiere en tiempo real?
+    - ¿Se recuerdan búsquedas previas?
+  ],
+
+  text(size: 9pt)[Flexibilidad y Eficiencia de Uso],
+  text(size: 9pt)[
+    - ¿Los usuarios frecuentes realizan tareas más rápido?
+    - ¿Se accede fácilmente a novedades y avisos?
+    - ¿Buscador y filtros entregan resultados útiles?
+    - ¿La navegación móvil es fluida?
+    - ¿Hay atajos o accesos directos?
+    - ¿Permiten comunicación rápida?
+  ],
+
+  text(size: 9pt)[Estética y Diseño Minimalista],
+  text(size: 9pt)[
+    - ¿El diseño es claro y sin elementos innecesarios?
+    - ¿La información se lee rápido?
+    - ¿Colores y tipografías son coherentes?
+    - ¿Espaciado y alineación adecuados?
+    - ¿Las imágenes aportan calidad?
+    - ¿Transmite confianza y profesionalismo?
+  ],
+
+  text(size: 9pt)[Reconocer, Diagnosticar y Recuperarse de Errores],
+  text(size: 9pt)[
+    - ¿Los errores son claros y comprensibles?
+    - ¿Se indican pasos o soluciones para continuar?
+    - ¿Hay páginas para contenido no disponible (404)?
+    - ¿Se sugieren alternativas cuando falla la búsqueda?
+    - ¿Se informa de fallos sin molestar?
+    - ¿"Próximamente" indica cuándo?
+    - ¿Existen rutas para volver atrás?
+  ],
+
+  text(size: 9pt)[Ayuda y Documentación],
+  text(size: 9pt)[
+    - ¿Hay guía de admisión visible?
+    - ¿Existen FAQs o manuales?
+    - ¿Se distingue contacto técnico vs. académico?
+    - ¿Se indican las modalidades?
+    - ¿Contexto institucional claro?
+    - ¿La ayuda es fácil de buscar?
+    - ¿Documentos actualizados?
+    - ¿Vías de soporte claras?
+    - ¿Chatbot preciso y útil?
+  ],
+)
+
+#pagebreak()
+
+== Hallazgos y Análisis
+
+Después de la evaluación individual realizada por los cuatro miembros del equipo, se consolidaron los resultados cuantitativos de la evaluación heurística. La siguiente tabla presenta las puntuaciones obtenidas por cada heurística, evaluadas de forma independiente por cada integrante del equipo.
+
+Las puntuaciones se calcularon considerando el peso asignado a cada pregunta dentro de cada heurística, donde 1.0 representa el cumplimiento completo del criterio, 0.5 indica cumplimiento parcial con oportunidades de mejora, y 0.0 señala incumplimiento del criterio evaluado. El total para cada evaluador representa la suma de las puntuaciones de las 10 heurísticas, permitiendo obtener una visión global de la usabilidad del prototipo.
+
+=== Tabla de Puntuaciones por Heurística
+
+#let estudiantes = (
+  (nombre: "Jhon Gutiérrez", eval: eval_jhon),
+  (nombre: "Eleonor Anturiano", eval: eval_eleonor),
+  (nombre: "Dayeza Merudia", eval: eval_dayeza),
+  (nombre: "Joaquin Villarpando", eval: eval_joaquin),
+)
+
+#let calcular_puntuacion(preguntas) = {
+  let peso_aplicable = 0.0
+  let punt_obtenida = 0.0
+  for p in preguntas {
+    if p.puntuacion != none {
+      peso_aplicable += p.peso
+      punt_obtenida += p.puntuacion * p.peso
+    }
+  }
+  if peso_aplicable > 0 { punt_obtenida / peso_aplicable } else { 0.0 }
+}
+
+// Calcular puntuaciones para todos
+#let resultados = ()
+#for est in estudiantes {
+  let puntuaciones = ()
+
+  for h in est.eval {
+    let p = calcular_puntuacion(h.preguntas)
+    puntuaciones.push(p)
+  }
+
+  let total = puntuaciones.sum()
+  resultados.push((nombre: est.nombre, puntuaciones: puntuaciones, total: total))
+}
+
+// Calcular promedio general
+#let promedio_general = resultados.map(r => r.total).sum() / resultados.len()
+
+#table(
+  columns: (2.5fr, 1.2fr, 1.2fr, 1.2fr, 1.2fr, 1.2fr),
+  align: (left, center, center, center, center, center),
+  stroke: 0.5pt + rgb("D0D0D0"),
+  fill: (x, y) => if y == 0 { rgb("2C3E50") } else if calc.odd(y) { rgb("FFFFFF") } else { rgb("F5F7FA") },
+
+  table.header(
+    text(weight: "bold", fill: white, size: 11pt)[Heurística],
+    ..for r in resultados { (text(weight: "bold", fill: white, size: 11pt)[#r.nombre],) },
+    text(weight: "bold", fill: white, size: 11pt)[Promedio],
+  ),
+
+  ..for (i, h) in heuristicas.enumerate() {
+    let fila = (text(fill: rgb("2C3E50"), size: 10pt)[#h.nombre],)
+    for r in resultados {
+      fila.push(text(weight: "bold", fill: rgb("1F4788"), size: 10pt)[#calc.round(r.puntuaciones.at(i), digits: 2)])
+    }
+    let promedio_h = resultados.map(r => r.puntuaciones.at(i)).sum() / resultados.len()
+    fila.push(text(weight: "bold", fill: rgb("27AE60"), size: 10pt)[#calc.round(promedio_h, digits: 2)])
+    fila
+  },
+
+  text(weight: "bold", fill: rgb("34495E"), size: 11pt)[TOTAL],
+  ..for r in resultados { (text(weight: "bold", fill: rgb("1F4788"), size: 11pt)[#calc.round(r.total, digits: 2)],) },
+  text(weight: "bold", fill: rgb("27AE60"), size: 11pt)[#calc.round(promedio_general, digits: 2)],
+)
+
+#let (categoria_text, categoria_color) = if promedio_general < 2.9 {
+  ("Producto muy pobre", rgb("FF0000"))
+} else if promedio_general <= 4.9 {
+  ("Producto pobre", rgb("FF6600"))
+} else if promedio_general <= 6.9 {
+  ("Producto mejorable", rgb("FF8C00"))
+} else if promedio_general <= 8.9 {
+  ("Buen producto", rgb("66CC00"))
+} else {
+  ("¡Excelente!", rgb("00CC00"))
+}
+
+#table(
+  columns: (1fr, auto),
+  align: left,
+  stroke: 0.5pt + rgb("D0D0D0"),
+  fill: (x, y) => if y == 0 { rgb("2C3E50") } else { categoria_color.lighten(85%) },
+
+  table.header(
+    text(weight: "bold", fill: white, size: 11pt)[Clasificación],
+    text(weight: "bold", fill: white, size: 11pt)[Puntuación],
+  ),
+
+  text(weight: "bold", fill: categoria_color, size: 11pt)[#categoria_text],
+  text(weight: "bold", fill: categoria_color, size: 11pt)[#calc.round(promedio_general, digits: 2)],
+)
+
+=== Análisis de Resultados
+
+La evaluación arrojó una puntuación promedio general de #calc.round(promedio_general, digits: 2) puntos sobre 10, clasificando al prototipo en la categoría "#categoria_text". Este resultado evidencia un sistema funcional con oportunidades significativas de mejora en usabilidad.
+
+La distribución de puntuaciones revela una marcada polarización: tres heurísticas obtuvieron puntuaciones críticas (< 0.4), mientras que otras tres alcanzaron niveles satisfactorios (> 0.7). Las áreas más deficientes corresponden a Recuperación de Errores (0.23), Prevención de Errores (0.29) y Ayuda y Documentación (0.37), representando el 30% del total evaluado. En contraste, las fortalezas se concentran en Reconocimiento vs Recuerdo (0.75), Consistencia y Estándares (0.74) y Relación con el Mundo Real (0.73).
+
+#figure(
+  cetz.canvas({
+    import cetz.draw: *
+
+    let truncate_name = name => {
+      let clusters = name.clusters()
+      if clusters.len() <= 20 { name } else { clusters.slice(0, 17).join("") + "..." }
+    }
+
+    let bar_colors = (
+      rgb("FF0000"), rgb("FF7F00"), rgb("FFFF00"), rgb("00CC00"), rgb("0099FF"),
+      rgb("4B0082"), rgb("9400D3"), rgb("FF1493"), rgb("00CED1"), rgb("FFD700"),
+    )
+
+    let data = ()
+    for (i, h) in heuristicas.enumerate() {
+      let promedio_h = resultados.map(r => r.puntuaciones.at(i)).sum() / resultados.len()
+      data.push((truncate_name(h.nombre), promedio_h))
+    }
+
+    chart.barchart(
+      size: (8, 4.5),
+      label-key: 0,
+      value-key: 1,
+      x-tick-step: 0.1,
+      y-label: "Heurística",
+      x-label: "Puntuación Promedio",
+      bar-style: (idx => (fill: bar_colors.at(idx))),
+      data,
+    )
+  }),
+  caption: [Puntuación promedio por heurística (escala 0-1)],
+)
+
+El gráfico de barras anterior ilustra la distribución completa de puntuaciones, donde la concentración de barras rojas y naranjas en las primeras posiciones evidencia la urgencia de intervención en aspectos de manejo de errores y documentación. Las heurísticas con puntuaciones intermedias (0.57-0.65) representan oportunidades de mejora que, aunque no críticas, impactan la eficiencia y claridad del sistema.
+
+#figure(
+  cetz.canvas({
+    import cetz.draw: *
+
+    let criticas = 0
+    let moderadas = 0
+    let buenas = 0
+
+    for (i, h) in heuristicas.enumerate() {
+      let promedio_h = resultados.map(r => r.puntuaciones.at(i)).sum() / resultados.len()
+      if promedio_h < 0.4 { criticas += 1 }
+      else if promedio_h < 0.7 { moderadas += 1 }
+      else { buenas += 1 }
+    }
+
+    let data = (
+      ("Críticas < 0.4", criticas),
+      ("Moderadas 0.4-0.7", moderadas),
+      ("Fortalezas > 0.7", buenas),
+    )
+
+    let slice_colors = (
+      (fill: rgb("FF0000")),
+      (fill: rgb("FF7F00")),
+      (fill: rgb("00CC00")),
+    )
+
+    chart.piechart(
+      data,
+      value-key: 1,
+      label-key: 0,
+      radius: 3.5,
+      stroke: none,
+      slice-style: (idx => slice_colors.at(idx)),
+      inner-radius: 1,
+      outset: 3,
+      inner-label: (content: (value, label) => [#text(white, weight: "bold", size: 12pt, str(value))], radius: 110%),
+      outer-label: (content: (value, label) => [#label], radius: 125%),
+    )
+  }),
+  caption: [Clasificación de heurísticas por nivel de severidad],
+)
+
+La gráfica circular confirma un balance equitativo en la distribución: 3 heurísticas críticas, 4 moderadas y 3 fortalezas. Esta proporción sugiere que el prototipo cuenta con bases sólidas en diseño visual y navegación, pero requiere atención inmediata en mecanismos de asistencia al usuario y manejo de situaciones excepcionales.
+
+La variabilidad entre evaluadores (rango 4.97-6.32 puntos) se mantiene dentro de parámetros esperados para evaluaciones heurísticas independientes, validando la robustez metodológica. Esta convergencia parcial en las puntuaciones individuales fortalece la confiabilidad de los hallazgos críticos identificados por consenso.
+
+= Consolidación de Hallazgos y Recomendaciones
+
+El análisis grupal identificó patrones recurrentes y problemas críticos basados en las evaluaciones independientes. Se priorizan hallazgos con evidencia específica (campos extra) sobre puntuaciones aisladas, enfocándose en severidad, frecuencia e impacto en la experiencia del usuario.
+
+== Resumen Ejecutivo de Hallazgos
+
+#table(
+  columns: (1.5fr, 1fr, 1fr, 4fr),
+  align: (left, center, center, left),
+  fill: (x, y) => if y == 0 { rgb("34495E") } else if calc.odd(y) { white } else { rgb("F8F9FA") },
+  
+  table.header(
+    text(weight: "bold", fill: white, size: 10pt)[Heurística],
+    text(weight: "bold", fill: white, size: 10pt)[Puntuación],
+    text(weight: "bold", fill: white, size: 10pt)[Severidad],
+    text(weight: "bold", fill: white, size: 10pt)[Problema Principal],
+  ),
+  
+  [H9: Recuperación de Errores], text(fill: rgb("E74C3C"), weight: "bold")[0.23], text(fill: rgb("E74C3C"), weight: "bold")[CRÍTICA], [Sin página 404 ni manejo de errores],
+  [H5: Prevención de Errores], text(fill: rgb("E74C3C"), weight: "bold")[0.29], text(fill: rgb("E74C3C"), weight: "bold")[CRÍTICA], [Enlaces rotos activos, validación deficiente],
+  [H10: Ayuda y Documentación], text(fill: rgb("E74C3C"), weight: "bold")[0.37], text(fill: rgb("E74C3C"), weight: "bold")[CRÍTICA], [Sin FAQs ni guía de admisión],
+  [H1: Visibilidad del Estado], text(fill: rgb("E67E22"), weight: "bold")[0.57], text(fill: rgb("E67E22"), weight: "bold")[ALTA], [Ausencia de breadcrumbs],
+  [H7: Flexibilidad y Eficiencia], text(fill: rgb("F39C12"), weight: "bold")[0.60], text(fill: rgb("F39C12"))[MEDIA], [Diseño responsive subóptimo],
+  [H8: Diseño Minimalista], text(fill: rgb("F39C12"), weight: "bold")[0.65], text(fill: rgb("F39C12"))[MEDIA], [Redundancia informativa],
+  [H2: Relación Mundo Real], text(fill: rgb("27AE60"), weight: "bold")[0.73], text(fill: rgb("27AE60"))[BUENA], [Anglicismos menores],
+  [H4: Consistencia y Estándares], text(fill: rgb("27AE60"), weight: "bold")[0.74], text(fill: rgb("27AE60"))[BUENA], [Buscadores duplicados],
+  [H6: Reconocimiento vs Recuerdo], text(fill: rgb("27AE60"), weight: "bold")[0.75], text(fill: rgb("27AE60"))[BUENA], [Información visible],
+)
+
+== Problemas Críticos y de Severidad Alta
+
+#table(
+  columns: (1.5fr, 1fr, 3fr, 3fr),
+  align: (left, center, left, left),
+  fill: (x, y) => if y == 0 { rgb("E74C3C").lighten(60%) } else if calc.odd(y) { white } else { rgb("FADBD8") },
+  stroke: 1pt + rgb("E74C3C").lighten(40%),
+  inset: 6pt,
+  
+  table.header(
+    text(weight: "bold", size: 10pt)[*Heurística*],
+    text(weight: "bold", size: 10pt)[*Punt.*],
+    text(weight: "bold", size: 10pt)[*Problemas Detectados*],
+    text(weight: "bold", size: 10pt)[*Recomendaciones*],
+  ),
+  
+  [H9: Recuperación de Errores],
+  text(fill: rgb("E74C3C"), weight: "bold")[0.23],
+  [• Sin página 404 personalizada\
+   • Búsqueda sin resultados sin alternativas\
+   • Mensajes de error genéricos\
+   • Fallos de carga silenciosos],
+  [• Diseñar página 404 con buscador y enlaces\
+   • Mostrar programas populares en búsquedas vacías\
+   • Manejo global de errores estructurado\
+   • Reintentos automáticos y notificaciones],
+  
+  [H5: Prevención de Errores],
+  text(fill: rgb("E74C3C"), weight: "bold")[0.29],
+  [• Enlace a sección "Doctorados" vacía activo\
+   • Buscador sin autocomplete\
+   • Validación de formularios deficiente\
+   • Filtros sin botón "Limpiar"],
+  [• Deshabilitar enlace a Doctorados\
+   • Búsqueda inteligente con corrección ortográfica\
+   • Marcar campos obligatorios (\*) con mensajes claros\
+   • Botón visible "Limpiar filtros"],
+  
+  [H10: Ayuda y Documentación],
+  text(fill: rgb("E74C3C"), weight: "bold")[0.37],
+  [• Sin guía de admisión visible\
+   • FAQs inexistentes\
+   • Contactos no diferenciados\
+   • Documentación sin fecha],
+  [• Sección Admisión en menú principal\
+   • Página FAQs por categorías\
+   • Segregar contactos técnico vs. académico\
+   • Agregar fecha y versión a documentos],
+  
+  [H1: Visibilidad del Estado],
+  text(fill: rgb("E67E22"), weight: "bold")[0.57],
+  [• Ausencia total de breadcrumbs\
+   • Feedback visual inconsistente\
+   • Ubicación deficiente en móvil],
+  [• Breadcrumbs con esquema jerárquico\
+   • Estandarizar estados hover/active\
+   • Indicador de sección visible en móvil],
+)
+
+== Problemas Moderados (Severidad Media)
+
+#table(
+  columns: (1.5fr, 1fr, 3fr, 3fr),
+  align: (left, center, left, left),
+  fill: (x, y) => if y == 0 { rgb("F39C12").lighten(70%) } else if calc.odd(y) { white } else { rgb("FEF5E7") },
+  stroke: 1pt + rgb("F39C12").lighten(40%),
+  inset: 6pt,
+  
+  table.header(
+    text(weight: "bold", size: 10pt)[*Heurística*],
+    text(weight: "bold", size: 10pt)[*Punt.*],
+    text(weight: "bold", size: 10pt)[*Problema*],
+    text(weight: "bold", size: 10pt)[*Recomendación*],
+  ),
+  
+  [H4: Consistencia y Estándares],
+  [0.74],
+  [• Buscadores duplicados con comportamiento divergente\
+   • Etiquetado inconsistente\
+   • Errores ortográficos: "Maestrias"\
+   • Íconos sin aria-labels],
+  [• Unificar componente de búsqueda\
+   • Auditoría de nomenclatura\
+   • Revisión ortográfica automatizada\
+   • Agregar tooltips y aria-labels],
+  
+  [H7: Flexibilidad y Eficiencia],
+  [0.60],
+  [• Diseño responsive subóptimo\
+   • Sin atajos de teclado],
+  [• Aplicar mobile-first design\
+   • Implementar atajos (búsqueda, cerrar, inicio)],
+  
+  [H8: Diseño Minimalista],
+  [0.65],
+  [• Nombre del programa duplicado en imagen y título],
+  [• Eliminar texto redundante de imágenes\
+   • Usar overlay solo para metadata],
+  
+  [H2: Relación Mundo Real],
+  [0.73],
+  [• Uso de "Brochure" (anglicismo)],
+  [• Reemplazar por "Folleto" o "Información del programa"],
+)
+
+== Fortalezas Identificadas
+
+#table(
+  columns: (1.5fr, 1fr, 4fr),
+  align: (left, center, left),
+  fill: (x, y) => if y == 0 { rgb("27AE60").lighten(70%) } else if calc.odd(y) { white } else { rgb("E8F8F5") },
+  stroke: 1pt + rgb("27AE60").lighten(40%),
+  inset: 6pt,
+  
+  table.header(
+    text(weight: "bold", size: 10pt)[*Heurística*],
+    text(weight: "bold", size: 10pt)[*Punt.*],
+    text(weight: "bold", size: 10pt)[*Aspectos a Preservar*],
+  ),
+  
+  [H6: Reconocimiento vs Recuerdo],
+  text(fill: rgb("27AE60"), weight: "bold")[0.75],
+  [Filtros visibles, contactos accesibles, nombres de programas destacados],
+  
+  [H4: Consistencia y Estándares],
+  text(fill: rgb("27AE60"), weight: "bold")[0.74],
+  [Diseño visual coherente, identidad gráfica consistente],
+  
+  [H2: Relación Mundo Real],
+  text(fill: rgb("27AE60"), weight: "bold")[0.73],
+  [Lenguaje académico apropiado, chatbot conversacional efectivo],
+  
+  [Consistencia Visual],
+  text(fill: rgb("27AE60"), weight: "bold")[--],
+  [Paleta de colores coherente, tipografía uniforme en todo el sitio],
+)
+
+
+== Priorización de Implementación
+
+#table(
+  columns: (1fr, 3fr, 1fr),
+  align: (center, left, center),
+  table.header(
+    [*Prioridad*], [*Recomendación*], [*Severidad*],
+  ),
+  [P0 (Crítico)], [Validar formularios y mejorar mensajes de error], [Alta],
+  [P0], [Crear página 404 personalizada], [Alta],
+  [P0], [Agregar autocompletado al buscador], [Alta],
+  [P1 (Alta)], [Implementar breadcrumbs globales], [Media],
+  [P1], [Desarrollar guía de admisión y FAQs], [Media],
+  [P1], [Unificar componentes de búsqueda], [Media],
+  [P2 (Media)], [Estandarizar feedback visual], [Baja],
+  [P2], [Optimizar diseño móvil], [Baja],
+  [P2], [Diferenciar contactos por tipo], [Baja],
+)
+
+= Conclusiones
+
+La evaluación heurística del prototipo del sitio web de Posgrado FCyT-UMSS fue realizada por cuatro evaluadores independientes aplicando las 10 heurísticas de Nielsen @nielsen1994heuristic. La puntuación promedio obtenida fue de #calc.round(promedio_general, digits: 2)/10, clasificando el producto en la categoría "#categoria_text".
+
+== Síntesis de Resultados
+
+#table(
+  columns: (1fr, 1fr, 1fr),
+  align: (left, center, left),
+  fill: (x, y) => if y == 0 { rgb("2C3E50") } else if calc.odd(y) { white } else { rgb("F8F9FA") },
+  stroke: 1pt + rgb("D0D0D0"),
+  inset: 8pt,
+  
+  table.header(
+    text(weight: "bold", fill: white, size: 10pt)[Categoría],
+    text(weight: "bold", fill: white, size: 10pt)[Cantidad],
+    text(weight: "bold", fill: white, size: 10pt)[Heurísticas Afectadas],
+  ),
+  
+  [Problemas Críticos\ (puntuación < 0.4)],
+  text(size: 11pt, fill: rgb("E74C3C"))[3],
+  [H9 (0.23), H5 (0.29), H10 (0.37)],
+  
+  [Problemas de Severidad Alta\ (puntuación 0.4-0.6)],
+  text(size: 11pt, fill: rgb("E67E22"))[1],
+  [H1 (0.57)],
+  
+  [Problemas Moderados\ (puntuación 0.6-0.7)],
+  text(size: 11pt, fill: rgb("F39C12"))[3],
+  [H7 (0.60), H8 (0.65), H4 (0.74)],
+  
+  [Fortalezas\ (puntuación > 0.7)],
+  text(size: 11pt, fill: rgb("27AE60"))[3],
+  [H2 (0.73), H6 (0.75), H3 (n/a)],
+)
+
+== Hallazgos Principales
+
+El análisis reveló una base funcional operativa con deficiencias concentradas en manejo de errores, prevención y documentación de ayuda. Las tres heurísticas con puntuación crítica (< 0.4) representan el 30% del total evaluado, indicando áreas específicas que requieren intervención inmediata.
+
+=== Áreas Críticas Identificadas
+
+#table(
+  columns: (1.5fr, 1fr, 4fr),
+  align: (left, center, left),
+  fill: (x, y) => if y == 0 { rgb("E74C3C").lighten(60%) } else if calc.odd(y) { white } else { rgb("FADBD8") },
+  stroke: 1pt + rgb("E74C3C").lighten(40%),
+  inset: 6pt,
+  
+  table.header(
+    text(weight: "bold", size: 10pt)[Heurística],
+    text(weight: "bold", size: 10pt)[Punt.],
+    text(weight: "bold", size: 10pt)[Impacto en la Experiencia del Usuario],
+  ),
+  
+  [H9: Recuperación de Errores],
+  [0.23],
+  [Usuarios sin orientación al encontrar errores, imposibilidad de recuperación efectiva],
+  
+  [H5: Prevención de Errores],
+  [0.29],
+  [Usuarios acceden a contenido inexistente, frustración por validaciones deficientes],
+  
+  [H10: Ayuda y Documentación],
+  [0.37],
+  [Dependencia excesiva del chatbot, ausencia de rutas informativas claras],
+)
+
+=== Fortalezas del Sistema
+
+#table(
+  columns: (1.5fr, 1fr, 4fr),
+  align: (left, center, left),
+  fill: (x, y) => if y == 0 { rgb("27AE60").lighten(60%) } else if calc.odd(y) { white } else { rgb("D5F4E6") },
+  stroke: 1pt + rgb("27AE60").lighten(40%),
+  inset: 6pt,
+  
+  table.header(
+    text(weight: "bold", size: 10pt)[Heurística],
+    text(weight: "bold", size: 10pt)[Punt.],
+    text(weight: "bold", size: 10pt)[Aspectos Destacables],
+  ),
+  
+  [H6: Reconocimiento vs Recuerdo],
+  [0.75],
+  [Elementos visibles facilitan navegación sin depender de memoria del usuario],
+  
+  [H4: Consistencia y Estándares],
+  [0.74],
+  [Coherencia visual mantiene identidad institucional en todo el sitio],
+  
+  [H2: Relación Mundo Real],
+  [0.73],
+  [Terminología académica apropiada, chatbot con lenguaje conversacional natural],
+)
+
+== Plan de Mejora Priorizado
+
+#table(
+  columns: (1fr, 1fr, 3fr, 1.5fr),
+  align: (center, center, left, center),
+  fill: (x, y) => if y == 0 { rgb("2C3E50") } else if calc.odd(y) { white } else { rgb("F8F9FA") },
+  stroke: 1pt + rgb("D0D0D0"),
+  inset: 6pt,
+  
+  table.header(
+    text(weight: "bold", fill: white, size: 10pt)[Prioridad],
+    text(weight: "bold", fill: white, size: 10pt)[Plazo],
+    text(weight: "bold", fill: white, size: 10pt)[Acciones Recomendadas],
+    text(weight: "bold", fill: white, size: 10pt)[Impacto Esperado],
+  ),
+  
+  [P0\ Crítico],
+  [Inmediato],
+  [• Página 404 personalizada\
+   • Validación de formularios\
+   • Autocompletado en buscador],
+  text(fill: rgb("E74C3C"))[+2.0 puntos],
+  
+  [P1\ Alta],
+  [Corto plazo],
+  [• Implementar breadcrumbs\
+   • Crear sección de admisión\
+   • Desarrollar FAQs\
+   • Unificar buscadores],
+  text(fill: rgb("E67E22"))[+1.2 puntos],
+  
+  [P2\ Media],
+  [Mediano plazo],
+  [• Optimizar diseño móvil\
+   • Feedback visual consistente\
+   • Segregar contactos],
+  text(fill: rgb("F39C12"))[+0.8 puntos],
+)
+
+== Proyección y Confiabilidad
+
+La metodología aplicada con cuatro evaluadores independientes @nielsen1990heuristic garantizó la identificación de problemas recurrentes mediante consenso, incrementando la confiabilidad de los hallazgos. La variabilidad moderada entre evaluadores (4.97 - 6.32 puntos) es consistente con estudios previos que demuestran que múltiples evaluadores detectan entre 75-90% de problemas de usabilidad @jeffries1991user.
+
+Con la implementación completa del plan priorizado, se proyecta una mejora de hasta 4.0 puntos, elevando la calificación a 9.57/10 (categoría "Excelente"). La implementación gradual por fases permitiría alcanzar la categoría "Buen producto" (7.57/10) tras completar las prioridades P0 y P1, mejorando significativamente la experiencia del usuario y alineándose con estándares académicos reconocidos.
+
+#pagebreak()
+
+#bibliography("bib.bib", title: "Bibliografia", style: "apa")
