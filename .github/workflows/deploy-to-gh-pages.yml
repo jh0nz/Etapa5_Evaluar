@@ -34,7 +34,7 @@ jobs:
           touying compile presentation.typ --output build/index.html --format html --font-paths fonts
 
       - name: Upload HTML artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: presentation-html
           path: build/index.html
