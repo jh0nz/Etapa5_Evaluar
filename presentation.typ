@@ -152,6 +152,29 @@
   [N/A], [No aplica],
 )
 
+== Ejemplo de Evaluación
+
+#text(size: 18pt)[*H1: Visibilidad del Estado del Sistema*]
+
+#table(
+  columns: (3fr, auto, auto),
+  align: (left, center, center),
+  stroke: 0.5pt,
+  fill: (x, y) => if y == 0 { rgb("34495E") } else if calc.odd(y) { white } else { rgb("ECF0F1") },
+  
+  [*Pregunta de Evaluación*], [*Peso*], [*Ejemplo*],
+  [¿Se muestra visualmente el estado de carga?], [0.2], [0.5],
+  [¿Se indica la página actual?], [0.11], [0.5],
+  [¿Se informa el resultado de acciones?], [0.21], [1.0],
+  [¿Las páginas vacías muestran mensajes claros?], [0.16], [1.0],
+  [¿Los elementos interactivos dan retroalimentación visual?], [0.21], [0.5],
+  [¿Las migas de pan reflejan la ubicación?], [0.11], [0.0],
+)
+
+#speaker-note[
+  Para ilustrar la metodología, aquí vemos un ejemplo de cómo se evaluó la heurística H1 Visibilidad del Estado del Sistema. Cada heurística tiene entre cinco y siete preguntas específicas, cada una con un peso diferente según su importancia. El evaluador responde cada pregunta con cero (no cumple), cero punto cinco (cumple parcialmente), o uno (cumple completamente). La puntuación final se calcula como promedio ponderado. En este ejemplo vemos que las migas de pan obtuvieron cero porque no existen, mientras que los mensajes en páginas vacías obtuvieron uno porque están bien implementados.
+]
+
 = Equipo de Evaluación
 
 == Integrantes
