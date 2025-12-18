@@ -86,8 +86,6 @@
 
 = Evaluación Heurística
 #align(center + horizon)[
-  #text(size: 28pt, weight: "bold")[Evaluación Heurística]
-  
   #text(size: 24pt)[Sitio Web Posgrado FCyT-UMSS]
   
   #v(2em)

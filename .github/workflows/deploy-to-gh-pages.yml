@@ -50,3 +50,20 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/index.html"
+          tag: ${{ github.ref_name }}-${{ github.run_number }}-${{ github.run_attempt }}
+          name: "Evaluación Heurística - Build ${{ github.run_number }}"
+          body: |
+            **Evaluación Heurística - Sitio Web Posgrado FCyT-UMSS**
+            
+            Presentación compilada de la evaluación heurística realizada por el equipo API.
+            
+            - **Rama:** ${{ github.ref_name }}
+            - **Commit:** ${{ github.sha }}
+            - **Ejecutado:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          draft: false
+          prerelease: false
