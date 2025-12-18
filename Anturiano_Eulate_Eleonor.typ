@@ -61,7 +61,7 @@
         *Nota:*
         La copia de los datos de contacto es parcialmente fácil, pero puede mejorarse. Aunque la información está visible y en formato texto, no existen ayudas explícitas que faciliten o indiquen claramente la acción de copiar.
 
-        *Imagen:*#image("images/contactos.png", width: 30%)
+        *Imagen:*#image("images/Contactos.png", width: 30%)
       ],
     ), // ¿Es fácil copiar datos de contacto (dirección, teléfono) desde la página?
     (puntuacion: 0.5), // ¿Hay rutas de escape visibles si una acción falla o no aporta resultado?
