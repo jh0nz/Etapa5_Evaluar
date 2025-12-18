@@ -1,4 +1,4 @@
-#import "@preview/touying:0.5.3": *
+#import "@preview/touying:0.6.1": *
 #import themes.simple: *
 #import "@preview/cetz:0.4.2"
 #import "@preview/cetz-plot:0.1.3": chart
@@ -97,6 +97,10 @@
   #text(size: 14pt)[Diciembre 2025]
 ]
 
+#speaker-note[
+  Buenos días a todos. Bienvenidos a la presentación de la evaluación heurística del sitio web de Posgrado de la Facultad de Ciencias y Tecnología de la UMSS. Somos el equipo API y hoy les presentaremos los hallazgos más importantes que encontramos al evaluar la usabilidad del prototipo. Agradecemos su presencia.
+]
+
 = Introducción
 
 == Evaluación Heurística
@@ -104,6 +108,10 @@
 - *Método:* Inspección de usabilidad por evaluadores expertos
 - *Base:* 10 heurísticas de Nielsen
 - *Objetivo:* Identificar problemas de usabilidad sistemáticamente
+
+#speaker-note[
+  Realizamos una evaluación heurística basada en las diez heurísticas de Nielsen. Cada uno de los cuatro integrantes del equipo evaluó el sitio de manera independiente, identificando problemas de usabilidad de forma sistemática. En esta presentación veremos los hallazgos consolidados, las áreas críticas que requieren atención inmediata, y las recomendaciones priorizadas para mejorar la experiencia del usuario.
+]
 
 == Sitio Evaluado
 
@@ -536,6 +544,10 @@
   table.cell(fill: categoria_color.lighten(85%))[#text(weight: "bold", fill: categoria_color, size: 16pt)[#calc.round(total, digits: 2)]],
 )
 
+#speaker-note[
+  Jhon Gutiérrez obtuvo una puntuación total de seis punto dos sobre diez, categorizando el producto como mejorable. Si bien existen fortalezas en consistencia visual e información clara, los hallazgos revelan áreas críticas que requieren intervención inmediata.
+]
+
 == Observaciones Principales - Jhon
 
 *Puntos críticos identificados:*
@@ -547,6 +559,10 @@
 - Inconsistencias en etiquetado de secciones
 
 *Total: #calc.round(total, digits: 2)/10 - #categoria_text*
+
+#speaker-note[
+  Los puntos críticos identificados por Jhon se concentran en tres áreas: la total ausencia de breadcrumbs o migas de pan para orientar al usuario, elementos interactivos sin retroalimentación visual cuando se pasa el cursor sobre ellos, y en dispositivos móviles el usuario debe abrir el menú hamburguesa solo para saber en qué sección se encuentra. Esta falta de feedback visual genera una percepción de baja interactividad y profesionalismo.
+]
 
 == Notas y Evidencias - Jhon
 
@@ -581,6 +597,10 @@
   ]
 }
 
+#speaker-note[
+  En las evidencias podemos observar ejemplos concretos de estos problemas. Por ejemplo, el usuario no puede identificar fácilmente su ubicación en el sitio y los enlaces no muestran estados activos claros. Ahora pasemos a ver la visión consolidada del equipo completo.
+]
+
 = Resultados Consolidados
 
 == Puntuación General del Equipo
@@ -609,6 +629,10 @@
   ..for r in resultados { (text(weight: "bold", size: 14pt)[#calc.round(r.total, digits: 2)],) },
 )
 
+#speaker-note[
+  En esta tabla vemos las puntuaciones de los cuatro evaluadores lado a lado. Observen que existe un alto consenso en las heurísticas críticas, donde todos los evaluadores coincidieron en puntuaciones bajas, especialmente en recuperación de errores y prevención. También hay consenso en las fortalezas, como reconocimiento versus recuerdo. Esta tabla es la base para nuestro análisis estadístico y las recomendaciones priorizadas.
+]
+
 == Clasificación Final
 
 #align(center)[
@@ -623,13 +647,13 @@
   ]
 ]
 
+#speaker-note[
+  La puntuación promedio final del equipo es seis punto cuatro sobre diez, lo que clasifica al prototipo como un producto mejorable. Esta categoría significa que el sitio tiene una base funcional sólida y varios aciertos importantes en diseño y contenido, pero presenta deficiencias críticas en tres heurísticas específicas que limitan significativamente la experiencia del usuario y requieren intervención urgente.
+]
+
 = Análisis de Resultados
 
 == Distribución de Puntuaciones
-
-*Puntuación promedio: #calc.round(promedio_general, digits: 2)/10 - #categoria_text*
-
-Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 fortalezas (> 0.7). Las deficiencias se concentran en manejo de errores y documentación.
 
 #figure(
   cetz.canvas({
@@ -672,6 +696,10 @@ Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 forta
     )
   })
 )
+
+#speaker-note[
+  En este gráfico de barras podemos identificar visualmente la distribución de puntuaciones. Observen la marcada polarización: las tres primeras barras en rojo y naranja representan las heurísticas críticas con puntuaciones inferiores a cero punto cuatro, mientras que las últimas tres barras en verde representan nuestras fortalezas con puntuaciones superiores a cero punto siete. Las barras rojas y naranjas son nuestra prioridad inmediata de intervención.
+]
 
 == Clasificación de Problemas
 
@@ -722,6 +750,10 @@ Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 forta
   })
 )
 
+#speaker-note[
+  Este gráfico de pastel resume la distribución de problemas. Tenemos tres heurísticas en estado crítico, cuatro en estado moderado, y tres identificadas como fortalezas. Esto significa que el treinta por ciento de las heurísticas evaluadas están en estado crítico, lo cual justifica la necesidad urgente de implementar un plan de acción estructurado y priorizado.
+]
+
 = Hallazgos Críticos
 
 == H9: Recuperación de Errores (0.23)
@@ -741,6 +773,10 @@ Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 forta
   [Fallos de carga silenciosos], [Frustración y desconfianza],
 )
 
+#speaker-note[
+  Esta es la heurística con la puntuación más baja: cero punto veintitrés sobre uno. El problema central es que cuando algo sale mal, el usuario se siente completamente atrapado sin opciones de recuperación. No existe una página cuatrocientos cuatro personalizada, las búsquedas vacías no ofrecen alternativas, los mensajes de error son genéricos y no orientan al usuario, y los fallos de carga ocurren silenciosamente sin ninguna explicación. Esto genera frustración inmediata y abandono del sitio.
+]
+
 == H5: Prevención de Errores (0.29)
 
 #table(
@@ -756,6 +792,10 @@ Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 forta
   [Sin botón "Limpiar filtros"], [Frustración en navegación],
 )
 
+#speaker-note[
+  La prevención de errores obtuvo cero punto veintinueve. El sistema actualmente permite que el usuario cometa errores que podrían evitarse fácilmente. Un ejemplo claro es el enlace a "Doctorados" que está activo pero conduce a una página vacía. El buscador no ofrece autocompletado que guíe al usuario, la validación de formularios es deficiente, y no existe un botón para limpiar filtros aplicados. Es fundamental guiar al usuario antes de que cometa el error, no después.
+]
+
 == H10: Ayuda y Documentación (0.37)
 
 #table(
@@ -770,6 +810,10 @@ Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 forta
   [Contactos sin diferenciar], [Confusión técnico vs académico],
   [Documentación sin fecha], [Contenido potencialmente obsoleto],
 )
+
+#speaker-note[
+  Ayuda y documentación recibió cero punto treinta y siete. El sitio asume incorrectamente que el usuario ya sabe cómo funciona el proceso de admisión y qué pasos debe seguir. No hay una guía de admisión visible, las preguntas frecuentes son inexistentes, los contactos no están diferenciados entre soporte técnico y académico, y la documentación disponible no tiene fechas. El chatbot es excelente, pero depender exclusivamente de él genera una carga cognitiva innecesaria y frustra a usuarios que prefieren buscar información por sí mismos.
+]
 
 == H1: Visibilidad del Estado (0.57)
 
@@ -787,11 +831,19 @@ Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 forta
   [Indicación de ubicación deficiente en móvil], [Requiere abrir menú para saber dónde está],
 )
 
+#speaker-note[
+  Visibilidad del estado del sistema obtuvo cero punto cincuenta y siete, clasificándola como severidad alta. El usuario frecuentemente no sabe en qué sección del sitio se encuentra. La ausencia total de breadcrumbs o migas de pan fue el problema más reportado por los cuatro evaluadores de manera unánime. El feedback visual es inconsistente y la indicación de ubicación es especialmente deficiente en dispositivos móviles, donde el usuario debe abrir el menú hamburguesa solo para orientarse. Este problema se agrava en pantallas pequeñas.
+]
+
 = Plan de Acción
+
+#speaker-note[
+  Ahora presentamos nuestro plan de acción estructurado en tres niveles de prioridad. P cero significa crítico e inmediato: estas son acciones que deben comenzar ya, esta semana o la próxima, porque el sitio no puede funcionar adecuadamente sin resolver estos problemas. P uno significa alta prioridad a corto plazo: estas mejoras deben implementarse en el próximo mes aproximadamente. P dos significa media prioridad a mediano plazo: estas acciones mejoran la calidad pero pueden ejecutarse en los siguientes dos a tres meses. Cada nivel tiene un impacto medible en la puntuación final.
+]
 
 == Prioridad P0 - Crítico (Inmediato)
 
-*Impacto esperado: +2.0 puntos*
+*Impacto esperado: +1.0 puntos*
 
 #table(
   columns: (auto, 3fr),
@@ -807,9 +859,13 @@ Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 forta
   [5], [Deshabilitar enlace a Doctorados, crear página informativa],
 )
 
+#speaker-note[
+  Estas cinco acciones tienen prioridad cero, lo que significa que deben ejecutarse de forma inmediata. Nuestro análisis estima que resolver estos cinco puntos incrementaría la puntuación general en aproximadamente un punto completo. El foco está concentrado en el manejo de errores y la funcionalidad de búsqueda, que son las áreas más críticas detectadas. Cada acción tiene un impacto directo y medible en la experiencia del usuario.
+]
+
 == Prioridad P1 - Alta (Corto Plazo)
 
-*Impacto esperado: +1.2 puntos*
+*Impacto esperado: +0.7 puntos*
 
 #table(
   columns: (auto, 3fr),
@@ -825,9 +881,13 @@ Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 forta
   [5], [Segregar contactos: técnico vs. académico],
 )
 
+#speaker-note[
+  Las acciones de prioridad uno deben implementarse en el corto plazo y se enfocan en navegación y sistemas de ayuda. La implementación de breadcrumbs es la solicitud número uno de todos los evaluadores sin excepción. La creación de una sección de admisión visible y estructurada es vital para convertir visitantes interesados en postulantes reales. El impacto estimado de este grupo de mejoras es de cero punto siete adicionales.
+]
+
 == Prioridad P2 - Media (Mediano Plazo)
 
-*Impacto esperado: +0.8 puntos*
+*Impacto esperado: +0.3 puntos*
 
 #table(
   columns: (auto, 3fr),
@@ -842,27 +902,37 @@ Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 forta
   [4], [Eliminar texto redundante de imágenes],
 )
 
+#speaker-note[
+  La prioridad dos agrupa acciones de mediano plazo enfocadas en pulido final y accesibilidad. Aunque no son críticas para la funcionalidad básica, estas mejoras elevan significativamente la calidad percibida del producto y demuestran profesionalismo. La estandarización de estados hover y active, la optimización responsive con enfoque mobile-first, y la adición de tooltips y aria-labels mejoran tanto la experiencia visual como la accesibilidad universal. El impacto estimado es de cero punto tres adicionales.
+]
+
 = Fortalezas del Prototipo
 
 == Aspectos Positivos
-
-#table(
-  columns: (2fr, 1fr, 3fr),
-  align: (left, center, left),
-  stroke: 0.5pt,
-  fill: (x, y) => if y == 0 { rgb("27AE60") } else if calc.odd(y) { white } else { rgb("E8F5E9") },
-  
-  [*Heurística*], [*Nota*], [*Fortaleza*],
-  [Reconocimiento antes que Recuerdo], [0.75], [Filtros visibles, info accesible],
-  [Consistencia y Estándares], [0.74], [Diseño coherente],
-  [Relación con Mundo Real], [0.73], [Terminología familiar],
-  [Flexibilidad y Eficiencia], [0.66], [Navegación fluida],
-)
-#pagebreak()
-*Elementos a preservar:*
-- Chatbot funcional con lenguaje natural
-- Identidad visual consistente
-- Información de programas clara
+#text(size: 22pt)[
+  #grid(columns: (auto ,auto), gutter: 8pt,
+    table(
+      columns: (auto,auto,auto),
+      align: (left, center, left),
+      stroke: 0.5pt,
+      fill: (x, y) => if y == 0 { rgb("27AE60") } else if calc.odd(y) { white } else { rgb("E8F5E9") },
+      
+      [*Heurística*], [*Nota*], [*Fortaleza*],
+      [Reconocimiento antes que Recuerdo], [0.75], [Filtros visibles, info accesible],
+      [Consistencia y Estándares], [0.74], [Diseño coherente],
+      [Relación con Mundo Real], [0.73], [Terminología familiar],
+      [Flexibilidad y Eficiencia], [0.66], [Navegación fluida],
+    )
+    ,
+    [*Elementos a preservar:*
+    - Chatbot funcional con lenguaje natural
+    - Identidad visual consistente
+    - Información de programas clara]
+  )
+]
+#speaker-note[
+  Es importante resaltar que no todo es negativo en el prototipo. Tenemos tres heurísticas con puntuaciones superiores a cero punto siete que representan verdaderas fortalezas. El reconocimiento antes que recuerdo obtuvo cero punto setenta y cinco gracias a filtros visibles e información accesible. La consistencia y estándares con cero punto setenta y cuatro demuestra un diseño coherente en todo el sitio. El chatbot funcional con lenguaje natural es una fortaleza tecnológica destacable, y la identidad visual consistente ayuda a que el usuario perciba el sitio como profesional y confiable.
+]
 
 = Conclusiones
 
@@ -883,7 +953,12 @@ Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 forta
   [Mejora Estimada], [En curso], [+2.0 puntos],
 )
 
+#speaker-note[
+  En resumen, el estado actual del prototipo es #calc.round(promedio_general, digits: 2)/10, clasificado como producto mejorable. Nuestra meta es alcanzar siete punto cinco o superior para reclasificarlo como buen producto. Identificamos tres heurísticas críticas que deben resolverse con prioridad cero, manteniendo las tres áreas de fortaleza existentes. El consenso entre los cuatro evaluadores es alto, lo que valida la robustez de nuestros hallazgos. La mejora estimada total implementando el plan completo es de dos puntos: uno punto cero de P cero, cero punto siete de P uno, y cero punto tres de P dos.
+]
+
 == Conclusión Final
+#text(size: 20pt)[
 
 *Estado actual: #calc.round(promedio_general, digits: 2)/10 - #categoria_text*
 
@@ -898,6 +973,11 @@ Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 forta
 - Interfaz familiar
 
 *Próximas mejoras:* Implementar plan P0 → P1 → P2
+ 
+]
+#speaker-note[
+  Para concluir, el prototipo del sitio de Posgrado FCyT-UMSS representa una base funcional sólida con elementos rescatables importantes. Sin embargo, requiere intervención urgente en tres áreas críticas: manejo de errores, prevención de errores, y ayuda y documentación. Los tres puntos fuertes que debemos preservar son el diseño consistente, la información clara de programas, y la interfaz familiar con terminología del mundo real. El camino a seguir está claro: implementar el plan de acción en el orden priorizado, de P cero a P dos, para alcanzar la meta de siete punto cinco y convertir este prototipo mejorable en un buen producto.
+]
 
 = 
 
@@ -912,4 +992,8 @@ Se observa una marcada polarización: 3 heurísticas críticas (< 0.4) y 3 forta
     Jhon · Eleonor · Dayeza · Joaquín
   ]
   
+]
+
+#speaker-note[
+  Muchas gracias por su atención y por acompañarnos en esta presentación. Estamos ahora disponibles para responder cualquier pregunta que tengan sobre la metodología, los hallazgos, o las recomendaciones del plan de acción. Los cuatro integrantes del equipo API estamos aquí para aclarar cualquier duda.
 ]
